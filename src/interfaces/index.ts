@@ -4,7 +4,7 @@
  * @作者: 廖军
  * @Date: 2021-02-03 14:38:55
  * @LastEditors: 廖军
- * @LastEditTime: 2021-02-03 15:15:17
+ * @LastEditTime: 2021-02-03 17:16:15
  */
 
 import * as React from 'react';
@@ -22,11 +22,13 @@ export interface ComponentNode {
 }
 
 export interface Annotations {
-	id: string;
+	id: string | number;
 	image_id: number;
 	category_id: number;
 	bbox: number[];
 	area: number;
+	segmentation: number[];
+	iscrowd: number;
 }
 
 export interface ImagesType {

@@ -4,7 +4,7 @@
  * @作者: 廖军
  * @Date: 2021-02-02 17:49:23
  * @LastEditors: 廖军
- * @LastEditTime: 2021-02-03 14:46:30
+ * @LastEditTime: 2021-02-03 17:16:25
  */
 
 import * as React from 'react';
@@ -29,6 +29,8 @@ export default () => {
 			category_id,
 			bbox: [],
 			area: 0,
+			segmentation: [],
+			iscrowd: 0,
 		});
 		nodes.push(node);
 	});

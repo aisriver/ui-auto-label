@@ -4,7 +4,7 @@
  * @作者: 廖军
  * @Date: 2021-02-02 15:35:29
  * @LastEditors: 廖军
- * @LastEditTime: 2021-02-03 16:48:15
+ * @LastEditTime: 2021-02-03 17:16:33
  */
 
 import * as puppeteer from 'puppeteer';
@@ -53,6 +53,7 @@ const cocoJSON: CocoJSON = {
 		mkdirSync(`./${FOLDER_NAME}`);
 	}
 	const htmlPages = createPageHtml();
+	let annotationId = 0;
 	for (let i = 0; i < htmlPages.length; i += 1) {
 		const { html, file_name, anonymous, image_id } = htmlPages[i];
 		await page.setContent(html);
@@ -80,9 +81,11 @@ const cocoJSON: CocoJSON = {
 			// 预留2个像素的标注空隙
 			cocoJSON.annotations.push({
 				...item,
+				id: annotationId,
 				bbox: [x - 2, y - 2, width + 4, height + 4],
 				area: width * height,
 			});
+			annotationId += 1;
 		}
 		// 截屏并写入
 		await page.screenshot({ path: `./${FOLDER_NAME}/${fileName}` });
