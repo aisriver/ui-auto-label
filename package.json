@@ -1,22 +1,27 @@
 {
 	"name": "ui-auto-label",
 	"version": "1.0.0",
-	"description": "ui auto label",
-	"main": "index.js",
+	"description": "UI组件coco数据集自动生成与标注",
+	"main": "src/index.tsx",
 	"scripts": {
 		"start": "ts-node src/index.tsx",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"author": "Jared",
 	"license": "ISC",
+	"git": "https://github.com/aisriver/ui-auto-label",
 	"dependencies": {
+		"@ant-design/colors": "^5.0.1",
+		"antd": "^4.11.2",
 		"jsdom": "^16.4.0",
+		"lodash": "^4.17.20",
 		"puppeteer": "^5.5.0",
 		"react": "^17.0.1",
 		"react-dom": "^17.0.1"
 	},
 	"devDependencies": {
 		"@types/jsdom": "^16.2.6",
+		"@types/lodash": "^4.14.168",
 		"@types/puppeteer": "^5.4.2",
 		"@types/react-dom": "^17.0.0",
 		"ts-node": "^9.1.1",

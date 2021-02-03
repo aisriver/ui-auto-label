@@ -1,39 +1,94 @@
 /*
- * @文件描述:
+ * @文件描述: 自动生成cocoJSON数据集
  * @公司: thundersdata
  * @作者: 廖军
  * @Date: 2021-02-02 15:35:29
  * @LastEditors: 廖军
- * @LastEditTime: 2021-02-02 17:02:45
+ * @LastEditTime: 2021-02-03 16:48:15
  */
 
 import * as puppeteer from 'puppeteer';
-import * as React from 'react';
-import { render } from 'react-dom';
+import { SerializableOrJSHandle } from 'puppeteer';
 import { JSDOM } from 'jsdom';
+import { existsSync, mkdirSync } from 'fs';
+import createPageHtml from './createPageHtml';
+import { CLASSES, PAGE_HEIGHT, PAGE_WIDTH, FOLDER_NAME, reWriteFile } from './constants';
+import { CocoJSON } from './interfaces';
 
 const dom = new JSDOM(`<!DOCTYPE html>`);
 globalThis.window = (dom.window as unknown) as Window & typeof globalThis;
 globalThis.document = window.document;
 
+const cocoJSON: CocoJSON = {
+	info: {
+		year: '2021',
+		version: '1',
+		description: 'UI组件coco数据集自动生成与标注ui',
+		contributor: '廖君',
+		url: 'https://github.com/aisriver/ui-auto-label',
+		date_created: new Date().toUTCString(),
+	},
+	licenses: [
+		{
+			id: 1,
+			url: 'https://creativecommons.org/publicdomain/zero/1.0/',
+			name: 'Public Domain',
+		},
+	],
+	categories: Object.keys(CLASSES).map(key => ({
+		id: CLASSES[key].id,
+		name: CLASSES[key].name,
+		supercategory: 'ui',
+	})),
+	images: [],
+	annotations: [],
+};
+
 (async () => {
 	const browser = await puppeteer.launch();
 	const page = await browser.newPage();
-	page.setViewport({ width: 1000, height: 1000 });
-	// 自定义渲染页面
-	const pageDom = document.createElement('div');
-	const dom = document.createElement('div');
-	render(
-		<div>
-			<h1>ces</h1>
-			<h2>欢迎使用 React</h2>
-		</div>,
-		dom
-	);
-	pageDom.appendChild(dom);
-	await page.setContent(pageDom.innerHTML);
-	// 截屏
-	await page.screenshot({ path: './coco-ui/example.png' });
+	page.setViewport({ width: PAGE_WIDTH, height: PAGE_HEIGHT });
+	// 检查根目录是否有写入目录
+	if (!existsSync(`./${FOLDER_NAME}`)) {
+		mkdirSync(`./${FOLDER_NAME}`);
+	}
+	const htmlPages = createPageHtml();
+	for (let i = 0; i < htmlPages.length; i += 1) {
+		const { html, file_name, anonymous, image_id } = htmlPages[i];
+		await page.setContent(html);
+		const fileName = `${file_name}.png`;
+		cocoJSON.images.push({
+			id: image_id,
+			license: 1,
+			file_name: fileName,
+			height: PAGE_HEIGHT,
+			width: PAGE_WIDTH,
+			date_captured: new Date().toUTCString(),
+		});
+		// 自动标注
+		for (let n = 0; n < anonymous.length; n += 1) {
+			const item = anonymous[n];
+			const { x, y, width, height } = await page.evaluate(item => {
+				const { x, y, width, height } = document.getElementById(item.id).getBoundingClientRect();
+				return {
+					x,
+					y,
+					width,
+					height,
+				};
+			}, (item as unknown) as SerializableOrJSHandle);
+			// 预留2个像素的标注空隙
+			cocoJSON.annotations.push({
+				...item,
+				bbox: [x - 2, y - 2, width + 4, height + 4],
+				area: width * height,
+			});
+		}
+		// 截屏并写入
+		await page.screenshot({ path: `./${FOLDER_NAME}/${fileName}` });
+	}
+	// 写入cocoJSON
+	reWriteFile(`./${FOLDER_NAME}/_annotations.coco.json`, JSON.stringify(cocoJSON));
 
 	await browser.close();
 })();
