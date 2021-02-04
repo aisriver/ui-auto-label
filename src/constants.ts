@@ -4,7 +4,7 @@
  * @作者: 廖军
  * @Date: 2021-02-02 17:55:44
  * @LastEditors: 廖军
- * @LastEditTime: 2021-02-03 17:07:59
+ * @LastEditTime: 2021-02-04 14:29:21
  */
 
 import { appendFileSync, existsSync, writeFileSync } from 'fs';
@@ -24,6 +24,8 @@ import {
 } from '@ant-design/colors';
 import { shuffle } from 'lodash';
 import { ObjectDetectionClass } from './interfaces';
+import { defaultCss } from './styles/css';
+import { darkCss } from './styles/darkCss';
 
 // 数据集分类
 export const CLASSES: { [key: string]: ObjectDetectionClass } = {
@@ -79,6 +81,22 @@ export const colors = [
 	...grey.slice(1, 10),
 ]; // 11 * 10
 
+// 主题色
+export const primaryColors = [
+	red.primary,
+	volcano.primary,
+	gold.primary,
+	yellow.primary,
+	lime.primary,
+	green.primary,
+	cyan.primary,
+	blue.primary,
+	geekblue.primary,
+	purple.primary,
+	magenta.primary,
+	grey.primary,
+];
+
 /**
  * 基于色板的随机颜色
  */
@@ -108,4 +126,22 @@ export const reWriteFile = (path: string, content: string) => {
 	} else {
 		appendFileSync(path, content, 'utf8');
 	}
+};
+
+export const themeCss = {
+	default: { primaryColor: '#1890ff', css: defaultCss },
+	dark: { primaryColor: '#177ddc', css: darkCss },
+};
+
+/**
+ * 从主题色获取样式
+ * @param color
+ */
+export const getCssByPrimaryColor = (color: string, theme: 'default' | 'dark') => {
+	const { css, primaryColor } = themeCss[theme];
+	const colors = [primaryColor, primaryColor.toLocaleUpperCase()];
+	if (colors.includes(color)) {
+		return css;
+	}
+	return css.replace(new RegExp(`(${colors.join('|')})`, 'g'), color);
 };

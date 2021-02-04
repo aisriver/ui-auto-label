@@ -52,7 +52,7 @@ const cocoJSON: CocoJSON = {
 	if (!existsSync(`./${FOLDER_NAME}`)) {
 		mkdirSync(`./${FOLDER_NAME}`);
 	}
-	const htmlPages = createPageHtml();
+	const htmlPages = await createPageHtml();
 	let annotationId = 0;
 	for (let i = 0; i < htmlPages.length; i += 1) {
 		const { html, file_name, anonymous, image_id } = htmlPages[i];
