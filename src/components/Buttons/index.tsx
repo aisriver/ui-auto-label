@@ -4,7 +4,7 @@
  * @作者: 廖军
  * @Date: 2021-02-03 09:47:56
  * @LastEditors: 廖军
- * @LastEditTime: 2021-02-04 15:32:23
+ * @LastEditTime: 2021-02-05 14:14:08
  */
 
 import * as React from 'react';
@@ -89,6 +89,7 @@ export default async () => {
 					key,
 					node: (
 						<Button
+							className={Math.random() > 0.5 ? 'ant-btn-focused' : ''}
 							id={key}
 							key={key}
 							style={style}

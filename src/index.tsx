@@ -4,7 +4,7 @@
  * @作者: 廖军
  * @Date: 2021-02-02 15:35:29
  * @LastEditors: 廖军
- * @LastEditTime: 2021-02-03 17:16:33
+ * @LastEditTime: 2021-02-05 14:23:20
  */
 
 import * as puppeteer from 'puppeteer';
@@ -18,6 +18,7 @@ import { CocoJSON } from './interfaces';
 const dom = new JSDOM(`<!DOCTYPE html>`);
 globalThis.window = (dom.window as unknown) as Window & typeof globalThis;
 globalThis.document = window.document;
+globalThis.cancelAnimationFrame = () => {};
 
 const cocoJSON: CocoJSON = {
 	info: {
@@ -57,11 +58,10 @@ const cocoJSON: CocoJSON = {
 	for (let i = 0; i < htmlPages.length; i += 1) {
 		const { html, file_name, anonymous, image_id } = htmlPages[i];
 		await page.setContent(html);
-		const fileName = `${file_name}.png`;
 		cocoJSON.images.push({
 			id: image_id,
 			license: 1,
-			file_name: fileName,
+			file_name,
 			height: PAGE_HEIGHT,
 			width: PAGE_WIDTH,
 			date_captured: new Date().toUTCString(),
@@ -88,7 +88,7 @@ const cocoJSON: CocoJSON = {
 			annotationId += 1;
 		}
 		// 截屏并写入
-		await page.screenshot({ path: `./${FOLDER_NAME}/${fileName}` });
+		await page.screenshot({ path: `./${FOLDER_NAME}/${file_name}` });
 	}
 	// 写入cocoJSON
 	reWriteFile(`./${FOLDER_NAME}/_annotations.coco.json`, JSON.stringify(cocoJSON));

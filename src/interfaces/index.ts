@@ -4,7 +4,7 @@
  * @作者: 廖军
  * @Date: 2021-02-03 14:38:55
  * @LastEditors: 廖军
- * @LastEditTime: 2021-02-03 17:16:15
+ * @LastEditTime: 2021-02-05 14:22:17
  */
 
 import * as React from 'react';
@@ -62,3 +62,7 @@ export interface CocoJSON {
 	images: ImagesType[];
 	annotations: Annotations[];
 }
+
+export declare type PanelMode = 'time' | 'date' | 'week' | 'month' | 'quarter' | 'year';
+
+export type Theme = 'default' | 'dark';

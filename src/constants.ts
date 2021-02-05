@@ -4,7 +4,7 @@
  * @作者: 廖军
  * @Date: 2021-02-02 17:55:44
  * @LastEditors: 廖军
- * @LastEditTime: 2021-02-04 14:29:21
+ * @LastEditTime: 2021-02-05 14:22:31
  */
 
 import { appendFileSync, existsSync, writeFileSync } from 'fs';
@@ -23,7 +23,7 @@ import {
 	grey,
 } from '@ant-design/colors';
 import { shuffle } from 'lodash';
-import { ObjectDetectionClass } from './interfaces';
+import { ObjectDetectionClass, Theme } from './interfaces';
 import { defaultCss } from './styles/css';
 import { darkCss } from './styles/darkCss';
 
@@ -97,6 +97,8 @@ export const primaryColors = [
 	grey.primary,
 ];
 
+export const themes = ['default', 'dark'];
+
 /**
  * 基于色板的随机颜色
  */
@@ -137,7 +139,7 @@ export const themeCss = {
  * 从主题色获取样式
  * @param color
  */
-export const getCssByPrimaryColor = (color: string, theme: 'default' | 'dark') => {
+export const getCssByPrimaryColor = (color: string, theme: Theme) => {
 	const { css, primaryColor } = themeCss[theme];
 	const colors = [primaryColor, primaryColor.toLocaleUpperCase()];
 	if (colors.includes(color)) {
