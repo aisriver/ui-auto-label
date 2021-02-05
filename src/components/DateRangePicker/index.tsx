@@ -1,16 +1,18 @@
 /*
- * @文件描述: DatePicker
+ * @文件描述: DateRangePicker
  * @公司: thundersdata
  * @作者: 廖军
- * @Date: 2021-02-05 10:45:14
+ * @Date: 2021-02-05 15:00:42
  * @LastEditors: 廖军
- * @LastEditTime: 2021-02-05 15:35:50
+ * @LastEditTime: 2021-02-05 15:35:25
  */
 
 import * as React from 'react';
 import { DatePicker } from 'antd';
 import { COMPONENT_LABEL_NUMBER, classIds } from '../../constants';
 import { ComponentNode, PanelMode } from '../../interfaces';
+
+const { RangePicker } = DatePicker;
 
 export default async () => {
 	const res: ComponentNode[] = [];
@@ -32,13 +34,13 @@ export default async () => {
 					margin: '10px',
 					display: 'inline-block',
 				};
-				const key = `datepicker-${m}-${s}-${l}`;
+				const key = `daterangepicker-${m}-${s}-${l}`;
 				res.push({
-					category_id: classIds.datepicker,
+					category_id: classIds.daterangepicker,
 					key,
 					node: (
 						<div id={key} key={key} style={style}>
-							<DatePicker
+							<RangePicker
 								className={Math.random() > 0.5 ? 'ant-picker-focused' : ''}
 								disabled={disabled[s]}
 								bordered={bordered[l]}

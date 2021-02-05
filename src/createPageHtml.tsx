@@ -4,7 +4,7 @@
  * @作者: 廖军
  * @Date: 2021-02-02 17:49:23
  * @LastEditors: 廖军
- * @LastEditTime: 2021-02-05 14:24:24
+ * @LastEditTime: 2021-02-05 15:37:13
  */
 
 import * as React from 'react';
@@ -15,8 +15,9 @@ import localeEn from 'antd/lib/locale/en_US';
 import getButtons from './components/Buttons';
 import getCheckbox from './components/Checkbox';
 import getDatePicker from './components/DatePicker';
+import getDateRangePicker from './components/DateRangePicker';
 import { getCssByPrimaryColor, primaryColors, themes } from './constants';
-import { Annotations, Theme } from './interfaces';
+import { Annotations, PageHTMLConfig, Theme } from './interfaces';
 
 const locale = {
 	zh: localeZh,
@@ -24,7 +25,7 @@ const locale = {
 };
 
 export default async () => {
-	const res: { file_name: string; html: string; image_id: number; anonymous: Annotations[] }[] = [];
+	const res: PageHTMLConfig[] = [];
 	let image_id = 0;
 
 	for (let i = 0; i < primaryColors.length; i += 1) {
@@ -36,7 +37,13 @@ export default async () => {
 			const buttons = await getButtons();
 			const checkboxNodes = await getCheckbox();
 			const datePickerNodes = await getDatePicker();
-			const components = [...buttons.splice(0, 30), ...checkboxNodes, ...datePickerNodes];
+			const dateRangePickerNodes = await getDateRangePicker();
+			const components = [
+				...buttons.splice(0, 20),
+				...checkboxNodes,
+				...datePickerNodes,
+				...dateRangePickerNodes,
+			];
 			const anonymous: Annotations[] = [];
 			const nodes: React.ReactNode[] = [];
 			components.forEach(({ node, category_id, key }) => {

@@ -4,7 +4,7 @@
  * @作者: 廖军
  * @Date: 2021-02-03 14:38:55
  * @LastEditors: 廖军
- * @LastEditTime: 2021-02-05 14:22:17
+ * @LastEditTime: 2021-02-05 14:52:01
  */
 
 import * as React from 'react';
@@ -38,6 +38,13 @@ export interface ImagesType {
 	height: number;
 	width: number;
 	date_captured: string;
+}
+
+export interface PageHTMLConfig {
+	file_name: string;
+	html: string;
+	image_id: number;
+	anonymous: Annotations[];
 }
 
 export interface CocoJSON {
