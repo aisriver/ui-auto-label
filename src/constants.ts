@@ -4,7 +4,7 @@
  * @作者: 廖军
  * @Date: 2021-02-02 17:55:44
  * @LastEditors: 廖军
- * @LastEditTime: 2021-02-05 14:22:31
+ * @LastEditTime: 2021-02-07 17:11:20
  */
 
 import { appendFileSync, existsSync, writeFileSync } from 'fs';
@@ -23,9 +23,21 @@ import {
 	grey,
 } from '@ant-design/colors';
 import { shuffle } from 'lodash';
+import { LoremIpsum } from 'lorem-ipsum';
 import { ObjectDetectionClass, Theme } from './interfaces';
 import { defaultCss } from './styles/css';
 import { darkCss } from './styles/darkCss';
+
+const lorem = new LoremIpsum({
+	sentencesPerParagraph: {
+		max: 8,
+		min: 4,
+	},
+	wordsPerSentence: {
+		max: 16,
+		min: 4,
+	},
+});
 
 // 数据集分类
 export const CLASSES: { [key: string]: ObjectDetectionClass } = {
@@ -45,6 +57,7 @@ export const CLASSES: { [key: string]: ObjectDetectionClass } = {
 	'14': { name: 'timepicker', id: 14, displayName: 'timepicker' },
 	'15': { name: 'timerangepicker', id: 15, displayName: 'timerangepicker' },
 	'16': { name: 'upload', id: 16, displayName: 'upload' },
+	'17': { name: 'textarea', id: 17, displayName: 'textarea' },
 };
 
 // 分类 id 映射
@@ -146,4 +159,63 @@ export const getCssByPrimaryColor = (color: string, theme: Theme) => {
 		return css;
 	}
 	return css.replace(new RegExp(`(${colors.join('|')})`, 'g'), color);
+};
+
+/**
+ * 获取随机中文
+ */
+export const randomZhWord = () => unescape('%u' + (Math.round(Math.random() * 10001) + 19968).toString(16));
+
+/**
+ * 获取随机文本
+ * @param param0
+ */
+export const getRandomText = ({ type, language }: { type: 'paragraph' | 'words'; language: 'zh' | 'en' }) => {
+	const obj = {
+		zh: {
+			words: Array.from({ length: randomIndex(2, 5) })
+				.map(() => randomZhWord())
+				.join(''),
+			paragraph: Array.from({ length: 8 })
+				.map(() =>
+					Array.from({ length: randomIndex(2, 12) })
+						.map(() => randomZhWord())
+						.join('')
+				)
+				.join('，'),
+		},
+		en: {
+			words: lorem.generateWords(randomIndex(1, 2)),
+			paragraph: lorem.generateSentences(5),
+		},
+	};
+	return obj[language][type];
+};
+
+/**
+ * 获取随机中文或英文短词
+ */
+export const randomWords = () => getRandomText({ type: 'words', language: Math.random() > 0.5 ? 'en' : 'zh' });
+
+/**
+ * 获取随机中文或英文段落
+ */
+export const randomParagraph = () => getRandomText({ type: 'paragraph', language: Math.random() > 0.5 ? 'en' : 'zh' });
+
+/**
+ * 通用placeholder
+ * @param type
+ */
+export const randomPlaceholder = (type: 'input' | 'select') => {
+	const obj = {
+		zh: {
+			input: '请输入',
+			select: '请选择',
+		},
+		en: {
+			input: 'please input',
+			select: 'please select',
+		},
+	};
+	return Math.random() > 0.5 ? obj.zh[type] : obj.en[type];
 };
