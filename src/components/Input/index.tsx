@@ -4,7 +4,7 @@
  * @作者: 廖军
  * @Date: 2021-02-07 10:33:03
  * @LastEditors: 廖军
- * @LastEditTime: 2021-02-07 11:25:54
+ * @LastEditTime: 2021-02-10 16:04:28
  */
 
 import * as React from 'react';
@@ -18,13 +18,13 @@ import {
 	EyeInvisibleOutlined,
 } from '@ant-design/icons';
 import { SizeType } from 'antd/lib/config-provider/SizeContext';
-import { COMPONENT_LABEL_NUMBER, randomIndex, classIds } from '../../constants';
+import { COMPONENT_LABEL_NUMBER, randomIndex, classIds, randomPlaceholder } from '../../constants';
 import { ComponentNode } from '../../interfaces';
 
 export default async () => {
 	const res: ComponentNode[] = [];
 	// 增加倍数
-	const multiple = 10;
+	const multiple = 2;
 
 	// 必要
 	const sizes = ['small', 'middle', 'large'];
@@ -45,12 +45,9 @@ export default async () => {
 				}
 				const style: React.CSSProperties = {
 					margin: '10px',
+					width: widths[randomIndex(0, widths.length)],
 				};
-				const width = widths[randomIndex(0, 20)];
 				const icon = icons[randomIndex(0, 15)];
-				if (width) {
-					style.width = `${width}px`;
-				}
 				const key = `input-${i}-${s}-${l}`;
 				res.push({
 					category_id: classIds.input,
@@ -65,6 +62,7 @@ export default async () => {
 							disabled={disabled[l]}
 							prefix={icon}
 							suffix={icon ? null : suffixIcons[randomIndex(0, 20)]}
+							placeholder={Math.random() > 0.4 ? randomPlaceholder('input') : null}
 						/>
 					),
 				});

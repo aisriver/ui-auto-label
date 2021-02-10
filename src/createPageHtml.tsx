@@ -4,7 +4,7 @@
  * @作者: 廖军
  * @Date: 2021-02-02 17:49:23
  * @LastEditors: 廖军
- * @LastEditTime: 2021-02-07 17:01:17
+ * @LastEditTime: 2021-02-10 16:14:36
  */
 
 import * as React from 'react';
@@ -16,7 +16,9 @@ import getButtons from './components/Buttons';
 import getCheckbox from './components/Checkbox';
 // import getDatePicker from './components/DatePicker';
 // import getDateRangePicker from './components/DateRangePicker';
-import getTextArea from './components/TextArea';
+// import getTextArea from './components/TextArea';
+// import getInput from './components/Input';
+import getInputNumber from './components/InputNumber';
 import { getCssByPrimaryColor, primaryColors, themes } from './constants';
 import { Annotations, PageHTMLConfig, Theme } from './interfaces';
 
@@ -39,13 +41,17 @@ export default async () => {
 			const checkboxNodes = await getCheckbox();
 			// const datePickerNodes = await getDatePicker();
 			// const dateRangePickerNodes = await getDateRangePicker();
-			const textareaNodes = await getTextArea();
+			// const textareaNodes = await getTextArea();
+			// const inputNodes = await getInput();
+			const inputNumberNodes = await getInputNumber();
 			const components = [
 				...buttons.splice(0, 20),
 				...checkboxNodes,
 				// ...datePickerNodes,
 				// ...dateRangePickerNodes,
-				...textareaNodes,
+				// ...textareaNodes,
+				// ...inputNodes,
+				...inputNumberNodes,
 			];
 			const anonymous: Annotations[] = [];
 			const nodes: React.ReactNode[] = [];
